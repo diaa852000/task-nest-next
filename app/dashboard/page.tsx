@@ -1,25 +1,17 @@
-'use client'
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import TodoList from "./TodoList";
 
-import { useEffect, useState } from "react";
-import IAuth from "@/types/auth.type";
+const DynamicUser = dynamic(() => import('./user-details'), { ssr: false })
 
 export function Dashboard() {
-    const [user, setUser] = useState<IAuth | undefined>();
-    
-    useEffect(() => {
-        const savedUser = localStorage.getItem('user');
-        if(savedUser) {
-            if (savedUser) {
-                setUser(JSON.parse(savedUser) as IAuth);
-                console.log(user)
-            }
-        }
-    },[])
 
     return (
         <div>
-            <div>Welcome, {user && user.name}</div>
-            <div>Email: {user && user.email}</div>
+            {/* <Suspense fallback={<div>Loading...</div>}>
+                <DynamicUser />
+            </Suspense> */}
+            <TodoList/>
         </div>
     );
 }

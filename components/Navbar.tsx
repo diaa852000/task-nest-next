@@ -7,22 +7,25 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import FlexBetween from "./FlexBetween";
-import { InputBase } from "@mui/material";
 import logo from "../public/logo.svg";
 import Image from "next/image";
+import { logout } from "@/lib/redux/features/auth/auth.slice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/lib/redux/store/store";
+import { Container } from "@mui/material";
+import { useRouter } from "next/navigation";
 
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Logout"];
 
 function Navbar() {
+  const auth = useSelector((state: RootState) => state.auth)
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -44,6 +47,13 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handlLogout = () => {
+    dispatch(logout())
+    handleCloseNavMenu();
+    router.push('/');
+  }
+
 
   return (
     <AppBar
@@ -86,9 +96,12 @@ function Navbar() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
+                <MenuItem key={auth.data?.id} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" >{auth.data?.name}</Typography>
+                </MenuItem>
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                  <MenuItem key={setting} onClick={handlLogout}>
+                    <Typography textAlign="center" >{setting}</Typography>
                   </MenuItem>
                 ))}
               </Menu>

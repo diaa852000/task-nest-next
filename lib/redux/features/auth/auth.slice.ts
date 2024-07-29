@@ -4,6 +4,7 @@ import ISliceState from "@/types/slice.type";
 import IAuth from "@/types/auth.type";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
+import { logout as logoutService } from "./auth.service";
 
 const token = Cookies.get('token');
 
@@ -26,7 +27,14 @@ const initialState: ISliceState<IAuth> = {
 const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            state.isLoading = false;
+            state.data = null;
+            state.hasError = null
+            logoutService();
+        }
+    },
     extraReducers: (builder) => {
         builder
             // LOGIN
@@ -42,9 +50,9 @@ const authSlice = createSlice({
                 Cookies.set('token', action.payload?.token, { expires: 3 });
                 localStorage.setItem('user', JSON.stringify(jwtDecode(action.payload?.token)))
             })
-            .addCase(loginThunk.rejected, (state, action: PayloadAction<any>) => {
+            .addCase(loginThunk.rejected, (state, action) => {
                 state.isLoading = false;
-                state.hasError = action.payload || 'Something went wrong';
+                state.hasError = action.error.message || 'Something went wrong';
             })
 
             // SIGNUP
@@ -60,11 +68,13 @@ const authSlice = createSlice({
                 Cookies.set('token', action.payload?.token, { expires: 3 });
                 localStorage.setItem('user', JSON.stringify(jwtDecode(action.payload?.token)))
             })
-            .addCase(signUpThunk.rejected, (state, action: PayloadAction<any>) => {
+            .addCase(signUpThunk.rejected, (state, action) => {
                 state.isLoading = false;
-                state.hasError = action.payload || 'Something went wrong';
+                state.hasError = action.error.message || 'Something went wrong';
             })
     }
 })
+
+export const {logout} = authSlice.actions
 
 export default authSlice.reducer;

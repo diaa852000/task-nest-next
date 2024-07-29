@@ -21,3 +21,4 @@ export const signUpThunk = createAsyncThunk('auth/signup', async (credentials: I
         return thunkApi.rejectWithValue(error);
     }
 });
+

@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
-const WithAuth = (WrappedComponent: React.FC) => {
+const withAuth = (WrappedComponent: React.FC) => {
     function Wrapper(props: any){
         const router = useRouter();
         const token = Cookies.get('token');
@@ -24,4 +24,4 @@ const WithAuth = (WrappedComponent: React.FC) => {
     return Wrapper;
 };
 
-export default WithAuth;
+export default withAuth;

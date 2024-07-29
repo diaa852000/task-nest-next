@@ -1,6 +1,9 @@
 import Navbar from "@/components/Navbar";
 import { Box, Container } from "@mui/material";
+import dynamic from "next/dynamic";
 import { ReactNode } from "react";
+
+
 
 interface layoutProps {
     children: ReactNode;

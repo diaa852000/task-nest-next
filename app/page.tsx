@@ -23,7 +23,7 @@ export default function Home() {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(signUpThunk({name, email, password }));
-    // router.push('/dashboard');
+    router.push('/dashboard');
   };
 
 
@@ -31,7 +31,7 @@ export default function Home() {
     <div>
       <h2>Login</h2>
       {auth.isLoading && <p>Loading...</p>}
-      {/* <form onSubmit={handleLogin}>
+      <form onSubmit={handleLogin}>
         <div>
           <label>Email:</label>
           <input
@@ -49,8 +49,8 @@ export default function Home() {
           />
         </div>
         <button type="submit">Signup</button>
-      </form> */}
-      <form onSubmit={handleSignUp}>
+      </form>
+      {/* <form onSubmit={handleSignUp}>
         <div>
           <label>Name:</label>
           <input
@@ -79,7 +79,7 @@ export default function Home() {
           />
         </div>
         <button type="submit">Login</button>
-      </form>
+      </form> */}
     </div>
   );
 }

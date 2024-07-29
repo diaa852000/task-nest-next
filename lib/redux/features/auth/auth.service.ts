@@ -25,5 +25,11 @@ export const signUp = async (credentials: ISignUp): Promise<{token: string}> => 
 }
 
 export const logout = (): void => {
-    Cookies.remove('token');
+    const token = Cookies.get('token');
+    const savedUser = localStorage.getItem('user');
+
+    if(token) {
+        Cookies.remove('token');
+        savedUser && localStorage.removeItem('user');
+    }
 };
