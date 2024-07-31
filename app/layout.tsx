@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <StoreProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={`${inter.className} max-w-[1430px] w-full mx-auto`}>{children}</body>
       </html>
     </StoreProvider>
   );

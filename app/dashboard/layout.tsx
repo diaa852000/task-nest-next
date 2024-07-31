@@ -1,26 +1,19 @@
 import Navbar from "@/components/Navbar";
-import { Box, Container } from "@mui/material";
-import dynamic from "next/dynamic";
 import { ReactNode } from "react";
-
-
 
 interface layoutProps {
     children: ReactNode;
 }
 
+
 function layout({ children }: layoutProps) {
     return (
-        <Box 
-            display={"flex"} 
-            flexDirection={"column"} 
-            gap={2}
-        >
+        <div className="flex flex-col justify-between gap-4">
             <Navbar />
-            <Container maxWidth="xl">
+            <div className="p-4">
                 {children}
-            </Container>
-        </Box>
+            </div>
+        </div>
     );
 }
 

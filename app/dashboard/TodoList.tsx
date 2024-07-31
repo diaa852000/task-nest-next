@@ -1,9 +1,8 @@
 'use client';
 
-import Todo from "@/components/Todo";
+import Todo from "@/app/dashboard/Todo";
 import { fetchTodosThunk } from "@/lib/redux/features/todo/todo.thunk";
 import { AppDispatch, RootState } from "@/lib/redux/store/store";
-import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,9 +10,6 @@ export default function TodoList() {
     const todos = useSelector((state: RootState) => state.todo);
     const auth = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch<AppDispatch>();
-
-    const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
 
 
     useEffect(() => {
@@ -24,21 +20,18 @@ export default function TodoList() {
     },[dispatch, auth.data?.id])
 
     return(
-        <Box
-            display={'flex'}
-            flexDirection={isSmallScreen ? 'column' : 'row'}
-            justifyContent={'space-between'}
-            gap={2}
-        >
+        <div className="flex flex-col lg:flex-row flex-wrap items-center justify-center xl:justify-start gap-2 w-full md:px-10">
             {todos?.data?.map((todo, index) => (
                 <Todo
                     key={index}
+                    _id={todo._id}
                     title={todo.title}
                     description={todo.description}
                     dueDate={todo.dueDate}
                     categories={todo.categories}
+                    isCompleted={todo.isCompleted}
                 />
             ))}
-        </Box>
+        </div>
     )
 }

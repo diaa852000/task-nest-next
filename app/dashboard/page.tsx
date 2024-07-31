@@ -1,17 +1,15 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import TodoList from "./TodoList";
 
-const DynamicUser = dynamic(() => import('./user-details'), { ssr: false })
+const Todos = dynamic(() => import('./TodoList'), {ssr: false})
 
 export function Dashboard() {
 
     return (
         <div>
-            {/* <Suspense fallback={<div>Loading...</div>}>
-                <DynamicUser />
-            </Suspense> */}
-            <TodoList/>
+            <Suspense fallback={<div>Loading</div>}>
+                <Todos/>
+            </Suspense>
         </div>
     );
 }
