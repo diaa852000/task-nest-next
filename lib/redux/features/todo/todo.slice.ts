@@ -6,6 +6,8 @@ import IApiResponse from "@/types/api.type";
 
 interface TodoState extends ISliceState<ITodo[]> {
     singleTodo: ITodo | null;
+    selectedCategories: string[] 
+
 }
 
 const initialState: TodoState = {
@@ -13,13 +15,35 @@ const initialState: TodoState = {
     hasError: null,
     data: [],
     singleTodo: null,
+    selectedCategories: []
 };
 
 
 const todoSlice = createSlice({
     name: 'todo',
     initialState,
-    reducers: {},
+    reducers: {
+        // handleSelectedCategories: (state, action) => {
+        //     const newSelectedCategory = action.payload;
+        //     if (!state.selectedCategories.includes(newSelectedCategory)) {
+        //         const newCategories = [...state.selectedCategories, newSelectedCategory]
+        //         state.selectedCategories = newCategories;
+        //     } else {
+        //         const newCategories = state.selectedCategories.filter(category => category !== newSelectedCategory);
+        //         state.selectedCategories = newCategories
+        //     }
+        // }
+        handleSelectedCategories: (state, action) => {
+            const newSelectedCategory = action.payload;
+            if (!state.selectedCategories.includes(newSelectedCategory)) {
+                state.selectedCategories.push(newSelectedCategory);
+            } else {
+                state.selectedCategories = state.selectedCategories.filter(
+                    category => category !== newSelectedCategory
+                );
+            }
+        },
+    },
     extraReducers: (builder) => {
         builder
             // POST
@@ -105,4 +129,5 @@ const todoSlice = createSlice({
     }
 })
 
+export const {handleSelectedCategories} = todoSlice.actions;
 export default todoSlice.reducer;
