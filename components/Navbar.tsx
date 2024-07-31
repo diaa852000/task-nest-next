@@ -40,7 +40,8 @@ function Navbar() {
             <button 
               type="button"
               onClick={handleLogout}
-              className="font-medium hover:text-gray-100 focus:outline-none focus:text-gray-400 border rounded-md p-2 bg-indigo-500 text-white"
+              className="font-medium focus:outline-none focus:text-gray-400 border rounded-md py-2 px-4
+              bg-indigo-500 text-white capitalize hover:bg-indigo-600 transition-all"
             >
               logout
             </button>

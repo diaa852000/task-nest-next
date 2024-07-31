@@ -20,7 +20,7 @@ export default function TodoList() {
     },[dispatch, auth.data?.id])
 
     return(
-        <div className="flex flex-col lg:flex-row flex-wrap items-center justify-center xl:justify-start gap-2 w-full md:px-10">
+        <div className="flex flex-col lg:flex-row flex-wrap items-center justify-center lg:justify-center xl:justify-start gap-4 w-full md:px-6 2xl:px-20 py-4">
             {todos?.data?.map((todo, index) => (
                 <Todo
                     key={index}

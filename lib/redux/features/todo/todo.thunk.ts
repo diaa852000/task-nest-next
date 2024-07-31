@@ -38,7 +38,7 @@ export const deleteTodoThunk = createAsyncThunk<IApiResponse<ITodo>, string>('de
     }
 });
 
-export const updateTodoThunk = createAsyncThunk<IApiResponse<ITodo>, ITodo>('patch/todo', async (data, thunkApi) => {
+export const updateTodoThunk = createAsyncThunk<IApiResponse<ITodo>, ITodo>('patch/todo', async (data: ITodo, thunkApi) => {
         try {
             const response = await updateTodo(data._id, data);
             if (!response) throw new Error('Cannot update the todo with this id');

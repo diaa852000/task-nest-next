@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { findOneTodoThunk, updateTodoThunk } from "@/lib/redux/features/todo/todo.thunk";
 import { AppDispatch, RootState } from "@/lib/redux/store/store";
 import ITodo from "@/types/todo.type";
+import { MultiValue, SingleValue } from "react-select";
+import { Options } from "@/types/select.type";
 
 export default function useUpdate(id: string) {
     const { singleTodo, isLoading } = useSelector((state: RootState) => state.todo);
@@ -12,7 +14,7 @@ export default function useUpdate(id: string) {
     const [description, setDescription] = useState(singleTodo?.description || "");
     const [dueDate, setDueDate] = useState(singleTodo?.dueDate || "");
     const [categories, setCategories] = useState(singleTodo?.categories || []);
-    const [isCompleted, setIsComplete] = useState(singleTodo?.isCompleted || "no");
+    const [isCompleted, setIsCompleted] = useState<string | null>(singleTodo?.isCompleted || "not completed")
 
     useEffect(() => {
         dispatch(findOneTodoThunk(id));
@@ -24,13 +26,26 @@ export default function useUpdate(id: string) {
             setDescription(singleTodo.description || "");
             setDueDate(singleTodo.dueDate || "");
             setCategories(singleTodo.categories || []);
-            setIsComplete(singleTodo?.isCompleted);
+            setIsCompleted(singleTodo.isCompleted || "not compeleted");
         }
     }, [singleTodo, id]);
 
-    const handleUpdateTodo = (data: ITodo) => {
-        dispatch(updateTodoThunk(data))
-    }
+    const handleCategoriesChange = (selectedOptions: MultiValue<Options> | null) => {
+        const selectedValues = (selectedOptions || []).map(option => option.value);
+        setCategories(selectedValues);
+    };
+    const handleIsCompletedChange = (selectedOption: SingleValue<Options> | null) => {
+        setIsCompleted(selectedOption ? selectedOption.value : null);
+    };
+
+    const handleUpdateTodo = async (data: ITodo) => {
+        try {
+            const response = await dispatch(updateTodoThunk(data));
+            return response.payload;
+        } catch (error) {
+            console.error("Error updating todo:", error);
+        }
+    };
 
     return {
         title,
@@ -42,9 +57,11 @@ export default function useUpdate(id: string) {
         categories,
         setCategories,
         isCompleted,
-        setIsComplete,
+        setIsCompleted,
         singleTodo,
         isLoading,
-        handleUpdateTodo
+        handleUpdateTodo,
+        handleCategoriesChange,
+        handleIsCompletedChange
     };
 }

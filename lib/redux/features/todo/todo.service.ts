@@ -38,7 +38,7 @@ export const deleteTodo = async (todoId: string): Promise<IApiResponse<ITodo>> =
 export const updateTodo = async (todoId: string, data: ITodo): Promise<IApiResponse<ITodo>> => {
     try {
         if(!todoId) throw new Error('_id maybe is null or undefined')
-        const response = await api.patch<Promise<IApiResponse<ITodo>>>(`todos/${todoId}`, {data});
+        const response = await api.patch<Promise<IApiResponse<ITodo>>>(`todos/${todoId}`, data);
         if(!response) throw new Error(`There is an Error while updating the todo wiht ID: ${todoId}`);
         return response.data;
     } catch (error: any) {
