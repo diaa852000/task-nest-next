@@ -47,7 +47,7 @@ export default function CreateTodo({ params }: any) {
         e.preventDefault();
         const res: any = await handleCreateTodo(data);
         console.log(res)
-        if(res?.success) router.push('/dashboard');
+        if(res?.payload.success) router.push('/dashboard');
     }
 
     const handleCancel = () => router.push('/dashboard');
