@@ -4,19 +4,26 @@
 import ITodo from "@/types/todo.type";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/redux/store/store";
-import { deleteTodoThunk } from "@/lib/redux/features/todo/todo.thunk";
+import { deleteTodoThunk, updateTodoThunk } from "@/lib/redux/features/todo/todo.thunk";
 import Link from "next/link";
 import { MdOutlineCancel } from "react-icons/md";
 import useTruncate from "@/hooks/useTruncate";
+import { ChangeEvent, useState } from "react";
 
 
 export default function Todo(props: ITodo) {
     const { title, description, dueDate, isCompleted, categories, _id } = props;
+    const [updateCompleted, setUpdateCompleted] = useState<string>(isCompleted);
     const dispatch = useDispatch<AppDispatch>();
 
     const handleDeleteTodo = (id: string) => {
-        console.log(id)
-        if (id) return dispatch(deleteTodoThunk(id));
+        id && dispatch(deleteTodoThunk(id));
+    }
+
+    const handleUpdateComplete = (id: string, e: ChangeEvent<HTMLInputElement>) => {
+        const newCompletedValue = e.target.value === "completed" ? "not completed" : "completed";
+        setUpdateCompleted(newCompletedValue);
+        id && dispatch(updateTodoThunk({ ...props, isCompleted: newCompletedValue }))
     }
 
     return (
@@ -25,16 +32,28 @@ export default function Todo(props: ITodo) {
                 <div className="flex flex-col gap-1">
                     <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
-                            <Link className="text-gray-700 font-medium" href={`dashboard/${_id}`}>{title}</Link>
-                            <span className="text-[10px] bg-gray-100 px-1 py-px text-gray-500 uppercase font-medium">{isCompleted}</span>
+                            <div className="flex items-center gap-4">
+                                <input
+                                    type="checkbox"
+                                    checked={updateCompleted === "completed" ? true : false}
+                                    value={updateCompleted}
+                                    onChange={e => handleUpdateComplete(_id || "", e)}
+                                    className="w-4 h-4"
+                                />
+                                <Link className="text-gray-700 font-medium" href={`dashboard/${_id}`}>{title}</Link>
+                            </div>
+
+                            <span className="text-[10px] bg-gray-100 px-1 py-px text-gray-500 uppercase font-medium">{updateCompleted}</span>
                         </div>
-                        <button type="button" onClick={() => handleDeleteTodo(_id)}>
-                            <MdOutlineCancel />
-                        </button>
+                        <div>
+                            <button type="button" onClick={() => handleDeleteTodo(_id || "")}>
+                                <MdOutlineCancel />
+                            </button>
+                        </div>
                     </div>
                     {description
                         ? <p className="text-gray-600 text-sm py-2 text-pretty">{useTruncate(description, 320)}</p>
-                        : <p className="text-gray-400 text-xs p-2 text-pretty bg-gray-50 w-fit font-semibold rounded shadow-sm mt-2 uppercase">add description to be appeared !</p>
+                        : <p className="text-gray-400 text-xs p-2 text-pretty bg-gray-50 w-fit font-semibold rounded shadow-sm my-2 uppercase">add description to be appeared !</p>
                     }
                 </div>
             </div>

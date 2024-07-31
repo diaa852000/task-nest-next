@@ -1,8 +1,8 @@
 
 export default interface ITodo {
-    _id: string;
+    _id?: string;
     title: string;
-    description: string;
+    description?: string;
     isCompleted: string;
     dueDate: string
     categories?: string[];

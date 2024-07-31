@@ -1,51 +1,37 @@
 "use client";
 
-import { logout } from "@/lib/redux/features/auth/auth.slice";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/lib/redux/store/store";
-import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
+import Link from "next/link";
+import { GoPlus } from "react-icons/go";
 
-
-const UserDetails = dynamic(() => import('@/app/dashboard/user-details'), {ssr: false})
+const UserDetails = dynamic(() => import('@/app/dashboard/user-details'), { ssr: false })
 
 
 function Navbar() {
-  const auth = useSelector((state: RootState) => state.auth)
-  const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
-
-  const handleLogout = () => {
-    dispatch(logout())
-    router.push('/');
-  }
-
-
   return (
-    <header className="relative flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-3 border-b">
-      <nav className="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between">
+    <header className="relative flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-4 border-b">
+      <nav className="max-w-[85rem] w-full mx-auto px-4 flex items-center justify-between">
         <div className="flex items-center justify-between">
-          <a className="flex-none text-xl font-semibold  focus:outline-none focus:opacity-80" href="#" aria-label="Brand">
+          <Link className="flex-none text-xl font-semibold  focus:outline-none focus:opacity-80" href="/dashboard" aria-label="Brand">
             <span className="text-xl font-semibold text-white bg-indigo-500 p-2 rounded-md shadow">
               TD
             </span>
-          </a>
+          </Link>
         </div>
-        <div id="hs-navbar-example" className="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block" aria-labelledby="hs-navbar-example-collapse">
-          <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
+        <div className="flex gap-5 items-center justify-end sm:mt-0 sm:ps-5">
+          <Link
+            href={'/dashboard/create'}
+          >
+            <span className="relative block w-7 h-7">
+              <span className="relative flex items-center justify-center w-full h-full border-rotate">
+                <GoPlus size={20} className="relative z-10" />
+              </span>
+            </span>
+          </Link>
           <Suspense fallback={<div>loading</div>}>
-            <UserDetails/>
+            <UserDetails />
           </Suspense>
-            <button 
-              type="button"
-              onClick={handleLogout}
-              className="font-medium focus:outline-none focus:text-gray-400 border rounded-md py-2 px-4
-              bg-indigo-500 text-white capitalize hover:bg-indigo-600 transition-all"
-            >
-              logout
-            </button>
-          </div>
         </div>
       </nav>
     </header>

@@ -1,15 +1,13 @@
 'use client'
 
-import useUpdate from "@/hooks/useUpdate";
+import useCreate from "@/hooks/useCreate";
 import { Options } from "@/types/select.type";
 import ITodo from "@/types/todo.type";
 import { useRouter } from "next/navigation";
 import { FormEvent } from "react";
 import Select from 'react-select';
 
-
-export default function SingleTodo({ params }: any) {
-    const id = params?.todoId;
+export default function CreateTodo({ params }: any) {
     const router = useRouter();
     const {
         title,
@@ -20,15 +18,12 @@ export default function SingleTodo({ params }: any) {
         setDueDate,
         categories,
         isCompleted,
-        singleTodo,
-        isLoading,
-        handleUpdateTodo,
+        handleCreateTodo,
         handleIsCompletedChange,
         handleCategoriesChange
-    } = useUpdate(id);
+    } = useCreate();
 
     const data: ITodo = {
-        _id: singleTodo?._id || "",
         title,
         description,
         dueDate,
@@ -50,13 +45,12 @@ export default function SingleTodo({ params }: any) {
 
     const handleSubmit =  async (e: FormEvent) => {
         e.preventDefault();
-        const res: any = await handleUpdateTodo(data);
+        const res: any = await handleCreateTodo(data);
+        console.log(res)
         if(res?.success) router.push('/dashboard');
     }
 
     const handleCancel = () => router.push('/dashboard');
-
-    if(isLoading) return <p>loading...</p>
 
     return (
         <div className="max-w-[800px] mx-auto p-4 ">
@@ -89,7 +83,7 @@ export default function SingleTodo({ params }: any) {
                 <div className="flex flex-col gap-1">
                     <label htmlFor="due-date" className="uppercase text-sm font-semibold">due Date</label>
                     <input
-                        type="text"
+                        type="date"
                         placeholder="Due date 'YYYY-MM-DD'"
                         value={dueDate}
                         onChange={(e) => setDueDate(e.target.value)}
@@ -125,7 +119,7 @@ export default function SingleTodo({ params }: any) {
                         type="submit"
                         className="uppercase text-sm rounded p-2 bg-indigo-500 text-white font-medium shadow"
                     >
-                        update
+                        create
                     </button>
                     <button
                         type="button"
