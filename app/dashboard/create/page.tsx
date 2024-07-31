@@ -46,7 +46,6 @@ export default function CreateTodo({ params }: any) {
     const handleSubmit =  async (e: FormEvent) => {
         e.preventDefault();
         const res: any = await handleCreateTodo(data);
-        console.log(res)
         if(res?.payload.success) router.push('/dashboard');
     }
 
